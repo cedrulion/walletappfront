@@ -3,7 +3,7 @@ import TransactionForm from '../components/TransactionForm';
 import TransactionsList from '../components/TransactionsList';
 import BudgetTracker from '../components/BudgetTracker';
 import VisualSummary from '../components/VisualSummary';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null); 
@@ -38,12 +38,14 @@ const Dashboard = () => {
       ) : (
         <div className="text-center mt-20">
           <h1 className="text-2xl font-bold mb-4">No account found</h1>
+          <Link className="px-4" to="/create-account">
           <button
             onClick={handleCreateAccountRedirect}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
             Create Account
           </button>
+          </Link>
         </div>
       )}
     </div>
