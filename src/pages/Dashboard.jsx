@@ -21,9 +21,6 @@ const Dashboard = () => {
     }
   }, [navigate]);
 
-  const handleCreateAccountRedirect = () => {
-    navigate('/create-account'); 
-  };
 
   return (
     <div className="container mx-auto p-4">
@@ -40,7 +37,7 @@ const Dashboard = () => {
           <h1 className="text-2xl font-bold mb-4">No account found</h1>
           <Link className="px-4" to="/create">
           <button
-            onClick={handleCreateAccountRedirect}
+           
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
             Create Account
