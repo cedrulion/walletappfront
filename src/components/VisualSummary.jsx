@@ -14,7 +14,7 @@ const VisualSummary = () => {
     const fetchTransactions = async () => {
       try {
      
-        const response = await axios.get('http://localhost:5000/api/transactions'); 
+        const response = await axios.get('https://walletapp-9wli.onrender.com/api/transactions'); 
         const data = response.data;
 
         
