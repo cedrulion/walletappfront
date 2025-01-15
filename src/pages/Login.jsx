@@ -31,7 +31,7 @@ const Login = () => {
       console.log('User:', user);
   
       
-      navigate('/login');
+      navigate('/dashboard');
     } catch (err) {
       
       const errorMessage =
