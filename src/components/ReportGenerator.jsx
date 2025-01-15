@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { fetchTransactions } from '../services/api';
 
 const ReportGenerator = () => {
@@ -7,13 +7,12 @@ const ReportGenerator = () => {
   const [report, setReport] = useState([]);
   const [error, setError] = useState(null);
 
-  const generateReport = async () => {
+  const generateReport = useCallback(async () => {
     try {
       const { data } = await fetchTransactions();
-      console.log("Fetched transactions:", data); // Debug log
+      console.log('Fetched transactions:', data);
 
-      // Get the user ID from localStorage
-      const userId = JSON.parse(localStorage.getItem('user'))?.id; // Assuming the user object has 'id'
+      const userId = JSON.parse(localStorage.getItem('user'))?.id;
       console.log('User ID from localStorage:', userId);
 
       if (!userId) {
@@ -22,29 +21,23 @@ const ReportGenerator = () => {
         return;
       }
 
-      // Filter transactions based on account ID
       const transactions = data
         .filter((txn) => txn.account?._id.toString() === userId)
         .map((item) => ({
           ...item,
-          date: new Date(item.date), // Parse date in UTC (no local time conversion)
+          date: new Date(item.date),
         }));
 
-      // If no date range is selected, show all transactions
       const filtered = transactions.filter((txn) => {
-        if (!startDate || !endDate) return true; // Show all if no date range selected
+        if (!startDate || !endDate) return true;
 
-        // Convert start and end dates to Date objects in UTC (with time set to 00:00:00 UTC)
         const start = new Date(startDate);
-        start.setUTCHours(0, 0, 0, 0); // Normalize to midnight UTC
+        start.setUTCHours(0, 0, 0, 0);
 
         const end = new Date(endDate);
-        end.setUTCHours(23, 59, 59, 999); // Normalize to the end of the day in UTC
+        end.setUTCHours(23, 59, 59, 999);
 
-        // Debugging the date comparison
-        console.log("Comparing dates:", txn.date, start, end);
-
-        // Return true if txn.date is within the start and end date range
+        console.log('Comparing dates:', txn.date, start, end);
         return txn.date >= start && txn.date <= end;
       });
 
@@ -53,12 +46,11 @@ const ReportGenerator = () => {
       console.error('Error fetching transactions:', err);
       setError('Failed to fetch transactions. Please try again later.');
     }
-  };
+  }, [startDate, endDate]);
 
-  // Fetch transactions on mount
   useEffect(() => {
     generateReport();
-  }, []); // Empty dependency array ensures this runs once when the component mounts
+  }, [generateReport]);
 
   return (
     <div className="bg-gray-100 p-4 rounded shadow mt-4">
