@@ -28,7 +28,7 @@ const CreateAccount = () => {
            await createAccount(accountData);
 
             alert('Account updated successfully!');
-            navigate('/login'); 
+            navigate('/create-category'); 
         } catch (error) {
             console.error('Error creating or updating account:', error);
             alert(

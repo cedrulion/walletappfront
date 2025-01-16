@@ -59,7 +59,7 @@ const CreateCategory = () => {
         setCategoryName('');
         setSubcategories([]);
         setSelectedPredefinedCategory('');
-        setTimeout(() => navigate('/dashboard'), 1500); 
+        setTimeout(() => navigate('/login'), 1500); 
       }
     } catch (error) {
       setMessage('Error creating category');
