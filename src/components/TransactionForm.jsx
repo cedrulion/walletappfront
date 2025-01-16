@@ -28,7 +28,7 @@ const TransactionForm = ({ onTransactionAdded }) => {
             const { data } = await fetchAccounts();
 
             
-            const userAccounts = data.filter((account) => account.userId === userId);
+            const userAccounts = data.filter((account) => account._id === userId);
             setAccounts(userAccounts);
         };
         fetchAccountData();
