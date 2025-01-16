@@ -8,6 +8,7 @@ const TransactionForm = ({ onTransactionAdded }) => {
         category: '',
         subcategory: '',
         account: '',
+        accountType: '', // To store selected account's type
     });
 
     const [categories, setCategories] = useState([]);
@@ -27,34 +28,45 @@ const TransactionForm = ({ onTransactionAdded }) => {
             const userId = JSON.parse(localStorage.getItem('user'))?.id;
             const { data } = await fetchAccounts();
 
-            
+            // Filter accounts to only show the logged-in user's accounts
             const userAccounts = data.filter((account) => account._id === userId);
             setAccounts(userAccounts);
         };
         fetchAccountData();
     }, []);
 
-  
     const handleCategoryChange = (e) => {
         const selectedCategory = categories.find((cat) => cat._id === e.target.value);
         setForm((prev) => ({ ...prev, category: e.target.value, subcategory: '' }));
         setSubcategories(selectedCategory?.subcategories || []);
     };
 
-  
+    const handleAccountChange = (e) => {
+        const selectedAccount = accounts.find((account) => account._id === e.target.value);
+        const selectedAccountType = selectedAccount?.accounts[0]?.type; // Get the type from the account
+
+        // Set the selected account and its type
+        setForm((prev) => ({
+            ...prev,
+            account: e.target.value,
+            accountType: selectedAccountType || '', // Default to empty string if no type found
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const transactionData = { ...form };
+
             if (form.type === 'Income') {
                 delete transactionData.category;
                 delete transactionData.subcategory;
             }
 
-            
+            // Send the transaction data including the account type
             await createTransaction(transactionData);
             onTransactionAdded();
-            setForm({ type: 'Income', amount: '', category: '', account: '' }); 
+            setForm({ type: 'Income', amount: '', category: '', account: '', accountType: '' });
         } catch (error) {
             console.error('Error creating transaction:', error);
             alert('Error submitting transaction');
@@ -127,19 +139,19 @@ const TransactionForm = ({ onTransactionAdded }) => {
                 </>
             )}
 
-
+            {/* Account selection */}
             <div className="mb-4">
                 <label className="block mb-1">Account</label>
                 <select
                     value={form.account}
-                    onChange={(e) => setForm({ ...form, account: e.target.value })}
+                    onChange={handleAccountChange}
                     className="w-full p-2 border rounded"
                     required
                 >
                     <option value="">Select Account</option>
                     {accounts.map((account) => (
                         <option key={account._id} value={account._id}>
-                            {account.name} ({account.type})
+                            {account.name} ({account.accounts[0]?.type})
                         </option>
                     ))}
                 </select>
