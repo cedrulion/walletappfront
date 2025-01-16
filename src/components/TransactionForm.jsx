@@ -7,8 +7,8 @@ const TransactionForm = ({ onTransactionAdded }) => {
         amount: '',
         category: '',
         subcategory: '',
-        account: '',
-        accountType: '', // To store selected account's type
+        account: '', // Account ID
+        accountType: '', // Account Type (independent of account)
     });
 
     const [categories, setCategories] = useState([]);
@@ -42,15 +42,11 @@ const TransactionForm = ({ onTransactionAdded }) => {
     };
 
     const handleAccountChange = (e) => {
-        const selectedAccount = accounts.find((account) => account._id === e.target.value);
-        const selectedAccountType = selectedAccount?.accounts[0]?.type; // Get the type from the account
+        setForm((prev) => ({ ...prev, account: e.target.value, accountType: '' }));
+    };
 
-        // Set the selected account and its type
-        setForm((prev) => ({
-            ...prev,
-            account: e.target.value,
-            accountType: selectedAccountType || '', // Default to empty string if no type found
-        }));
+    const handleAccountTypeChange = (e) => {
+        setForm((prev) => ({ ...prev, accountType: e.target.value }));
     };
 
     const handleSubmit = async (e) => {
@@ -63,7 +59,7 @@ const TransactionForm = ({ onTransactionAdded }) => {
                 delete transactionData.subcategory;
             }
 
-            // Send the transaction data including the account type
+            // Send the transaction data including the account and accountType
             await createTransaction(transactionData);
             onTransactionAdded();
             setForm({ type: 'Income', amount: '', category: '', account: '', accountType: '' });
@@ -151,11 +147,33 @@ const TransactionForm = ({ onTransactionAdded }) => {
                     <option value="">Select Account</option>
                     {accounts.map((account) => (
                         <option key={account._id} value={account._id}>
-                            {account.name} ({account.accounts[0]?.type})
+                            {account.name}
                         </option>
                     ))}
                 </select>
             </div>
+
+            {/* Account type selection */}
+            {form.account && (
+                <div className="mb-4">
+                    <label className="block mb-1">Account Type</label>
+                    <select
+                        value={form.accountType}
+                        onChange={handleAccountTypeChange}
+                        className="w-full p-2 border rounded"
+                        required
+                    >
+                        <option value="">Select Account Type</option>
+                        {accounts
+                            .find((account) => account._id === form.account)
+                            ?.accounts.map((account, index) => (
+                                <option key={index} value={account.type}>
+                                    {account.type}
+                                </option>
+                            ))}
+                    </select>
+                </div>
+            )}
 
             <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
                 Add Transaction
