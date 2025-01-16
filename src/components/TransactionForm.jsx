@@ -7,8 +7,8 @@ const TransactionForm = ({ onTransactionAdded }) => {
         amount: '',
         category: '',
         subcategory: '',
-        account: '', // Account ID
-        accountType: '', // Account Type (independent of account)
+        account: '', 
+        accountType: '', 
     });
 
     const [categories, setCategories] = useState([]);
@@ -26,9 +26,7 @@ const TransactionForm = ({ onTransactionAdded }) => {
     useEffect(() => {
         const fetchAccountData = async () => {
             const userId = JSON.parse(localStorage.getItem('user'))?.id;
-            const { data } = await fetchAccounts();
-
-            // Filter accounts to only show the logged-in user's accounts
+            const { data } = await fetchAccounts()
             const userAccounts = data.filter((account) => account._id === userId);
             setAccounts(userAccounts);
         };
@@ -59,7 +57,6 @@ const TransactionForm = ({ onTransactionAdded }) => {
                 delete transactionData.subcategory;
             }
 
-            // Send the transaction data including the account and accountType
             await createTransaction(transactionData);
             onTransactionAdded();
             setForm({ type: 'Income', amount: '', category: '', account: '', accountType: '' });

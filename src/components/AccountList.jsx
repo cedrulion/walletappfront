@@ -26,7 +26,7 @@ const AccountList = () => {
         const userData = response.data.find((user) => user._id === userId);
 
         if (userData) {
-          setAccounts(userData.accounts);  // Set accounts for the logged-in user
+          setAccounts(userData.accounts);  
           setFilteredAccounts(userData.accounts);
         }
 

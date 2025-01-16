@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { fetchCategories } from '../services/api'; // Make sure this points to your API service
+import { fetchCategories } from '../services/api'; 
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch categories on component mount
+
   useEffect(() => {
     const getCategories = async () => {
       try {
         const response = await fetchCategories();
-        setCategories(response.data);  // Assuming the categories are returned in 'data'
+        setCategories(response.data); 
       } catch (err) {
         setError('Failed to fetch categories.');
       } finally {
@@ -22,7 +22,7 @@ const CategoryList = () => {
     getCategories();
   }, []);
 
-  // Render loading, error, or categories
+
   if (loading) {
     return <div>Loading categories...</div>;
   }
@@ -67,15 +67,14 @@ const CategoryList = () => {
   );
 };
 
-// Handle edit functionality (you can add this function to navigate to an edit page)
 const handleEdit = (categoryId) => {
   console.log(`Editing category with ID: ${categoryId}`);
-  // Navigate to the edit page or show an edit modal
+
 };
 
-// Handle delete functionality (make sure to confirm before deleting)
+
 const handleDelete = async (categoryId) => {
-  // Implement delete logic here (e.g., calling delete API endpoint)
+
   console.log(`Deleting category with ID: ${categoryId}`);
 };
 
