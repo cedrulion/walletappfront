@@ -10,19 +10,14 @@ const BudgetTracker = () => {
       try {
         const { data } = await fetchTransactions();
 
-        // Get the user ID from localStorage
-        const userId = JSON.parse(localStorage.getItem('user'))?.id; // Assuming user object has 'id'
+        const userId = JSON.parse(localStorage.getItem('user'))?.id; 
         if (!userId) {
           console.error('User ID not found in localStorage');
           return;
         }
-
-        // Filter transactions based on account ID matching the user's ID
         const filteredTransactions = data.filter(
           (txn) => txn.account?._id.toString() === userId && txn.type === 'Expense'
         );
-
-        // Calculate total expenses
         const totalExpenses = filteredTransactions.reduce((acc, curr) => acc + curr.amount, 0);
 
         setExpenses(totalExpenses);
