@@ -6,13 +6,13 @@ const Navbar = () => (
     <div className="container mx-auto flex justify-between">
       <h1 className="text-xl font-bold">Wallet App</h1>
       <div>
-       
+        <Link className="px-4" to="/dashboard">Dashboard</Link>
         <Link className="px-4" to="/transactions">Transactions</Link>
         <Link className="px-4" to="/reports">Reports</Link>
         <Link className="px-4" to="/account">Profile</Link>
       </div>
     </div>
-
+    
   </nav>
 );
 
