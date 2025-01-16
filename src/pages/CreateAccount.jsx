@@ -24,11 +24,11 @@ const CreateAccount = () => {
                 balance: parseFloat(accountBalance),
             };
 
-            // Call the API to create or update the account
-            const response = await createAccount(accountData);
+           
+           await createAccount(accountData);
 
             alert('Account updated successfully!');
-            navigate('/dashboard'); // Navigate to the dashboard or another page
+            navigate('/dashboard'); 
         } catch (error) {
             console.error('Error creating or updating account:', error);
             alert(
